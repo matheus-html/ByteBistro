@@ -22,9 +22,9 @@ public class BancoConfig {
         String cliente = "CREATE TABLE IF NOT EXISTS Cliente(\n" +
                 "\tid_cliente INT AUTO_INCREMENT PRIMARY KEY,\n" +
                 "    nome_cliente VARCHAR(100) NOT NULL,\n" +
-                "    cpf VARCHAR(100) NOT NULL,\n" +
+                "    cpf VARCHAR(100) UNIQUE NOT NULL,\n" +
                 "    telefone VARCHAR(100) NOT NULL,\n" +
-                "    email VARCHAR(100) UNIQUE\n" +
+                "    email VARCHAR(100) UNIQUE NOT NULL\n" +
                 ");";
         String mesa = "CREATE TABLE IF NOT EXISTS Mesa(\n" +
                 "\tid_mesa INT AUTO_INCREMENT PRIMARY KEY,\n" +
@@ -39,9 +39,6 @@ public class BancoConfig {
                 "    id_mesa INT NOT NULL,\n" +
                 "    data_hora DATETIME NOT NULL,\n" +
                 "    num_pessoas INT NOT NULL,\n" +
-                "    status ENUM('confirmada', 'cancelada', 'concluida') \n" +
-                "    DEFAULT 'confirmada',\n" +
-                "    data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,\n" +
                 "    FOREIGN KEY (id_cliente) REFERENCES Cliente(id_cliente),\n" +
                 "    FOREIGN KEY (id_mesa) REFERENCES Mesa(id_mesa),\n" +
                 "    CONSTRAINT reserva_mesa_data UNIQUE (id_mesa, data_hora)\n" +
@@ -51,8 +48,7 @@ public class BancoConfig {
                 "    nome VARCHAR(100) NOT NULL,\n" +
                 "    descricao TEXT,\n" +
                 "    preco DECIMAL(10, 2) NOT NULL,\n" +
-                "    categoria VARCHAR(100) NOT NULL,\n" +
-                "    disponivel BOOLEAN DEFAULT TRUE\n" +
+                "    categoria VARCHAR(100) NOT NULL\n" +
                 ");";
 
         Statement stmt = criarConexao().createStatement();
