@@ -4,42 +4,13 @@ public class Mesa {
     private int id_mesa;
     private int capacidade;
     private String localizacao;
-    private StatusMesa status;
+    private String statusMesa;
 
-    public Mesa() {
-        this.status = StatusMesa.DISPONIVEL;
-    }
-
-    public Mesa(int capacidade, String localizacao, StatusMesa status) {
+    public Mesa(int id_mesa, int capacidade, String localizacao, String statusMesa) {
+        this.id_mesa = id_mesa;
         this.capacidade = capacidade;
         this.localizacao = localizacao;
-        this.status = status;
-    }
-
-    public enum StatusMesa {
-        DISPONIVEL("disponivel"),
-        OCUPADA("ocupada"),
-        MANUTENCAO("manutencao");
-
-        private final String valor;
-
-        StatusMesa(String valor) {
-            this.valor = valor;
-        }
-
-        public String getValor() {
-            return valor;
-        }
-    }
-
-    @Override
-    public String toString() {
-        return "Mesa{" +
-                "idMesa=" + id_mesa +
-                ", capacidade=" + capacidade +
-                ", localizacao='" + localizacao + '\'' +
-                ", status=" + status +
-                '}';
+        this.statusMesa = statusMesa;
     }
 
     public int getId_mesa() {
@@ -60,10 +31,12 @@ public class Mesa {
     public void setLocalizacao(String localizacao) {
         this.localizacao = localizacao;
     }
-    public StatusMesa getStatus() {
-        return status;
+
+    public String getStatusMesa() {
+        return statusMesa;
     }
-    public void setStatus(StatusMesa status) {
-        this.status = status;
+
+    public void setStatusMesa(String statusMesa) {
+        this.statusMesa = statusMesa;
     }
 }

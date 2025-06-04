@@ -19,10 +19,10 @@ public class Login {
             validarUsuario.setString(1, username);
             validarUsuario.setString(2, password);
 
-            ResultSet resultSet = validarUsuario.executeQuery();
+            ResultSet rs = validarUsuario.executeQuery();
 
-            if(resultSet.next()){
-                return resultSet.getString("role");
+            if(rs.next()){
+                return rs.getString("role");
             }
         } catch(SQLException e) {
             e.printStackTrace();

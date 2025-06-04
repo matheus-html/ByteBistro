@@ -6,7 +6,9 @@ import javax.swing.*;
 
 public class ClienteUI extends Painel {
     public ClienteUI() {
-        super("Cliente");
+        super("Painel cliente - ByteBistro");
+
+
     }
 
 

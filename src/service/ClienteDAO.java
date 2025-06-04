@@ -8,10 +8,6 @@ import java.util.ArrayList;
 
 public class ClienteDAO {
 
-    public ClienteDAO() {
-
-    }
-
     public void inserirCliente(Cliente cliente){
         String sql = "INSERT INTO Cliente (nome_cliente, cpf, telefone, email) VALUES (?,?,?,?)";
         Connection conexao = null;
@@ -25,7 +21,7 @@ public class ClienteDAO {
             ps.setString(2, cliente.getCpf());
             ps.setString(3, cliente.getTelefone());
             ps.setString(4, cliente.getEmail());
-            ps.execute();
+            ps.executeUpdate();
 
         } catch(SQLException e){
             System.err.println("Houve um erro ao salvar cliente: " + e.getMessage());
@@ -76,44 +72,27 @@ public class ClienteDAO {
             e.printStackTrace();
         } finally {
             try {
-                if (rs != null) rs.close();
-                if (st != null) st.close();
-                if (conexao != null) conexao.close();
+                if (rs != null){
+                    rs.close();
+                }
+                if (st != null){
+                    st.close();
+                }
+                if (conexao != null){
+                    conexao.close();
+                }
             } catch (SQLException e) {
                 e.printStackTrace();
             }
         if(clientes.isEmpty()){
-            System.out.println("Nenhum cliente encontrado.");
+            System.out.println("Nenhum cliente registrado.");
         }
         }
         return clientes;
     }
 
-//    public boolean clienteExiste(int id)  throws SQLException{
-//        String sql = "SELECT 1 FROM Cliente WHERE id_cliente = ?";
-//            Connection conexao = null;
-//            PreparedStatement ps = null;
-//            ResultSet rs = null;
-//
-//        try {
-//            conexao = BancoConfig.criarConexao();
-//            ps = conexao.prepareStatement(sql);
-//            ps.setInt(1, id);
-//
-//            rs = ps.executeQuery();
-//            return rs.next();
-//        } catch(SQLException e){
-//            System.err.println("Houve um erro ao buscar cliente: " + e.getMessage());
-//        }
-//        return false;
-//    }
 
     public void editarCliente(Cliente cliente) throws SQLException {
-
-//        if (!clienteExiste(cliente.getId())) {
-//            System.out.println("Cliente com ID " + cliente.getId() + " não encontrado.");
-//        }
-
         String sql = "UPDATE Cliente SET nome_cliente = ? , " + "cpf = ?, " + "telefone = ?, " + "email = ? WHERE id_cliente = ?";
         Connection conexao = null;
         PreparedStatement ps = null;
@@ -130,7 +109,7 @@ public class ClienteDAO {
             int retorno = ps.executeUpdate();
 
             if(retorno > 0){
-                System.out.println("Os dados do cliente foram atualizados.");
+                System.out.println("Cliente foi atualizado.");
             } else{
                 System.out.println("Nenhum registro foi modificado.");
             }

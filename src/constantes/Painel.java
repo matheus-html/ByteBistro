@@ -5,7 +5,7 @@ import javax.swing.*;
 public class Painel extends JFrame {
     public Painel(String titulo) {
         super(titulo);
-        setSize(900, 900);
+        setSize(1000, 1000);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLayout(null);
         setLocationRelativeTo(null);

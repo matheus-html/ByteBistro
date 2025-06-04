@@ -11,7 +11,7 @@ import java.awt.event.ActionListener;
 
 public class LoginUI extends Painel {
     public LoginUI() {
-        super("Login");
+        super("Painel login - ByteBistro");
         addComponentesLogin();
     }
 

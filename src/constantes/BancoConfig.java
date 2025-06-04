@@ -18,7 +18,7 @@ public class BancoConfig {
         }
     }
 
-    public static void criarBanco() throws SQLException {
+    public static void criarTabelas() throws SQLException {
         String cliente = "CREATE TABLE IF NOT EXISTS Cliente(\n" +
                 "\tid_cliente INT AUTO_INCREMENT PRIMARY KEY,\n" +
                 "    nome_cliente VARCHAR(100) NOT NULL,\n" +
@@ -30,8 +30,7 @@ public class BancoConfig {
                 "\tid_mesa INT AUTO_INCREMENT PRIMARY KEY,\n" +
                 "    capacidade INT NOT NULL,\n" +
                 "    localizacao VARCHAR(50) NOT NULL,\n" +
-                "\tstatus ENUM('disponivel', 'ocupada', 'manutencao') \n" +
-                "    DEFAULT 'disponivel'\n" +
+                "\tstatusMesa VARCHAR(50) NOT NULL\n" +
                 ");";
         String reserva = "CREATE TABLE IF NOT EXISTS Reserva(\n" +
                 "\tid_reserva INT AUTO_INCREMENT PRIMARY KEY,\n" +
@@ -45,7 +44,7 @@ public class BancoConfig {
                 ");";
         String cardapio = "CREATE TABLE IF NOT EXISTS Cardapio(\n" +
                 "\tid_item INT AUTO_INCREMENT PRIMARY KEY,\n" +
-                "    nome VARCHAR(100) NOT NULL,\n" +
+                "    nome_Item VARCHAR(100) NOT NULL,\n" +
                 "    descricao TEXT,\n" +
                 "    preco DECIMAL(10, 2) NOT NULL,\n" +
                 "    categoria VARCHAR(100) NOT NULL\n" +

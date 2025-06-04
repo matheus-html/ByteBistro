@@ -8,7 +8,7 @@ import java.awt.*;
 
 public class GerenteUI extends Painel {
     public GerenteUI() {
-        super("Gerente");
+        super("Painel gerente - ByteBistro");
         JLabel welcomeLabel = new JLabel("Bem vindo(a), Gerente!");
         welcomeLabel.setBounds(50, 50, 400, 30);
         welcomeLabel.setFont(new Font("Dialog", Font.BOLD, 18));
@@ -28,5 +28,15 @@ public class GerenteUI extends Painel {
             new ClienteUI().setVisible(true);
         });
         add(gerenciarClientesBotao);
+
+        JButton voltarBotao = new JButton("Voltar para tela de Login");
+        voltarBotao.setBounds(125, 270, 250, 50);
+        voltarBotao.addActionListener(e ->{
+            int input = JOptionPane.showConfirmDialog(GerenteUI.this, "Tem certeza que deseja voltar para a tela de login?");
+            if (input == JOptionPane.YES_OPTION) {
+                new LoginUI().setVisible(true);
+            }
+        });
+        add(voltarBotao);
     }
 }

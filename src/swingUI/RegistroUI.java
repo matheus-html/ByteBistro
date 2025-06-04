@@ -12,5 +12,9 @@ public class RegistroUI extends Painel {
 
     private void addComponentesRegistro(){
         JLabel registroLabel = new JLabel("Registro");
+
+        add(registroLabel);
     }
+
+
 }
