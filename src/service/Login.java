@@ -14,7 +14,7 @@ public class Login {
             conn = BancoConfig.criarConexao();
 
             PreparedStatement validarUsuario = conn.prepareStatement(
-                    "SELECT * FROM " + BancoConfig.tabUsuario + " WHERE NOMEUSUARIO = ? AND SENHA = ?"
+                    "SELECT * FROM Usuario WHERE NOMEUSUARIO = ? AND SENHA = ?"
             );
             validarUsuario.setString(1, username);
             validarUsuario.setString(2, password);

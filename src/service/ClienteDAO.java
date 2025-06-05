@@ -10,12 +10,9 @@ public class ClienteDAO {
 
     public void inserirCliente(Cliente cliente){
         String sql = "INSERT INTO Cliente (nome_cliente, cpf, telefone, email) VALUES (?,?,?,?)";
-        Connection conexao = null;
-        PreparedStatement ps = null;
 
-        try{
-            conexao = BancoConfig.criarConexao();
-            ps = conexao.prepareStatement(sql);
+        try(Connection conexao = BancoConfig.criarConexao();
+        PreparedStatement ps = conexao.prepareStatement(sql)){
 
             ps.setString(1, cliente.getNomeCliente());
             ps.setString(2, cliente.getCpf());
@@ -24,32 +21,17 @@ public class ClienteDAO {
             ps.executeUpdate();
 
         } catch(SQLException e){
-            System.err.println("Houve um erro ao salvar cliente: " + e.getMessage());
-        } finally{
-            try{
-                if(ps != null){
-                    ps.close();
-                }
-                if(conexao != null){
-                    conexao.close();
-                }
-            } catch (Exception e){
-                e.printStackTrace();
-            }
+            System.err.println("Erro ao cadastrar cliente: " + e.getMessage());
         }
     }
 
     public ArrayList<Cliente> listarClientes(){
         ArrayList<Cliente> clientes = new ArrayList<>();
         String sql = "SELECT * FROM Cliente";
-        Connection conexao = null;
-        Statement st = null;
-        ResultSet rs = null;
 
-        try{
-            conexao = BancoConfig.criarConexao();
-            st = conexao.createStatement();
-            rs = st.executeQuery(sql);
+        try(Connection conexao = BancoConfig.criarConexao();
+            PreparedStatement ps = conexao.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery()){
 
             while(rs.next()){
                 int id = rs.getInt("id_cliente");
@@ -60,105 +42,54 @@ public class ClienteDAO {
 
                 Cliente cliente = new Cliente(id, nomeCliente, cpf, telefone, email);
                 clientes.add(cliente);
-
-                System.out.println("ID: " + id +
-                        ", Nome: " + nomeCliente +
-                        ", CPF: " + cpf +
-                        ", Telefone: " + telefone +
-                        ", Email: " + email);
             }
-
         } catch (SQLException e){
-            e.printStackTrace();
-        } finally {
-            try {
-                if (rs != null){
-                    rs.close();
-                }
-                if (st != null){
-                    st.close();
-                }
-                if (conexao != null){
-                    conexao.close();
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        if(clientes.isEmpty()){
-            System.out.println("Nenhum cliente registrado.");
-        }
+            System.err.println("Erro ao listar clientes: " + e.getMessage());
         }
         return clientes;
     }
 
+    public void atualizarCliente(Cliente clienteAtualizado) throws SQLException {
+        String sql = "UPDATE Cliente SET nome_cliente = ? , cpf = ?, telefone = ?, email = ? WHERE id_cliente = ?";
 
-    public void editarCliente(Cliente cliente) throws SQLException {
-        String sql = "UPDATE Cliente SET nome_cliente = ? , " + "cpf = ?, " + "telefone = ?, " + "email = ? WHERE id_cliente = ?";
-        Connection conexao = null;
-        PreparedStatement ps = null;
+        try(Connection conexao = BancoConfig.criarConexao();
+             PreparedStatement ps = conexao.prepareStatement(sql)){
 
-        try{
-            conexao = BancoConfig.criarConexao();
-            ps = conexao.prepareStatement(sql);
-            ps.setString(1, cliente.getNomeCliente());
-            ps.setString(2, cliente.getCpf());
-            ps.setString(3, cliente.getTelefone());
-            ps.setString(4, cliente.getEmail());
-            ps.setInt(5, cliente.getId());
+            ps.setString(1, clienteAtualizado.getNomeCliente());
+            ps.setString(2, clienteAtualizado.getCpf());
+            ps.setString(3, clienteAtualizado.getTelefone());
+            ps.setString(4, clienteAtualizado.getEmail());
+            ps.setInt(5, clienteAtualizado.getId());
 
-            int retorno = ps.executeUpdate();
+            int linhasAfetadas = ps.executeUpdate();
 
-            if(retorno > 0){
-                System.out.println("Cliente foi atualizado.");
+            if(linhasAfetadas > 0){
+                System.out.println("Cliente atualizado.");
             } else{
-                System.out.println("Nenhum registro foi modificado.");
+                System.out.println("Nenhum cliente foi modificado.");
             }
         } catch(SQLException e){
-            System.err.println("Houve um erro ao atualizar cliente: " + e.getMessage());
-        } finally{
-            try{
-                if(ps != null){
-                    ps.close();
-                }
-                if(conexao != null){
-                    conexao.close();
-                }
-            } catch (SQLException e){
-                e.printStackTrace();
-            }
+            System.err.println("Erro ao atualizar cliente: " + e.getMessage());
         }
     }
 
     public void removerCliente(int id_cliente){
         String sql = "DELETE FROM Cliente WHERE id_cliente = ?";
-        Connection conexao = null;
-        PreparedStatement ps = null;
 
-        try{
-            conexao = BancoConfig.criarConexao();
-            ps = conexao.prepareStatement(sql);
+        try(Connection conexao = BancoConfig.criarConexao();
+            PreparedStatement ps = conexao.prepareStatement(sql)){
+
             ps.setInt(1, id_cliente);
 
-            int retorno = ps.executeUpdate();
+            int linhasAfetadas = ps.executeUpdate();
 
-            if(retorno > 0){
+            if(linhasAfetadas > 0){
                 System.out.println("Cliente removido.");
             } else {
                 System.out.println("Nenhum registro foi removido.");
             }
         } catch (SQLException e) {
-            System.err.println("Houve um erro ao remover cliente: " + e.getMessage());
-        } finally {
-            try{
-                if(ps != null){
-                    ps.close();
-                }
-                if (conexao != null){
-                    conexao.close();
-                }
-            } catch (SQLException e){
-                e.printStackTrace();
-            }
+            System.err.println("Erro ao remover cliente: " + e.getMessage());
         }
     }
 }

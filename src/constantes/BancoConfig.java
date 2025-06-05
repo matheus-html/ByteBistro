@@ -3,7 +3,6 @@ package constantes;
 import java.sql.*;
 
 public class BancoConfig {
-    public static final String tabUsuario = "Usuario";
 
     public static Connection criarConexao() throws SQLException {
         try{
@@ -30,7 +29,8 @@ public class BancoConfig {
                 "\tid_mesa INT AUTO_INCREMENT PRIMARY KEY,\n" +
                 "    capacidade INT NOT NULL,\n" +
                 "    localizacao VARCHAR(50) NOT NULL,\n" +
-                "\tstatusMesa VARCHAR(50) NOT NULL\n" +
+                "\tstatusMesa ENUM ('ocupada', 'disponivel') NOT NULL DEFAULT 'disponivel',\n" +
+                "    CONSTRAINT mesa_capacidade_localizacao UNIQUE (capacidade, localizacao)\n" +
                 ");";
         String reserva = "CREATE TABLE IF NOT EXISTS Reserva(\n" +
                 "\tid_reserva INT AUTO_INCREMENT PRIMARY KEY,\n" +
@@ -42,18 +42,40 @@ public class BancoConfig {
                 "    FOREIGN KEY (id_mesa) REFERENCES Mesa(id_mesa),\n" +
                 "    CONSTRAINT reserva_mesa_data UNIQUE (id_mesa, data_hora)\n" +
                 ");";
+
         String cardapio = "CREATE TABLE IF NOT EXISTS Cardapio(\n" +
                 "\tid_item INT AUTO_INCREMENT PRIMARY KEY,\n" +
-                "    nome_Item VARCHAR(100) NOT NULL,\n" +
+                "    nome_item VARCHAR(100) NOT NULL UNIQUE\t,\n" +
                 "    descricao TEXT,\n" +
-                "    preco DECIMAL(10, 2) NOT NULL,\n" +
+                "    preco DECIMAL(10, 2) NOT NULL CHECK (preco > 0),\n" +
                 "    categoria VARCHAR(100) NOT NULL\n" +
                 ");";
 
-        Statement stmt = criarConexao().createStatement();
-        stmt.execute(cliente);
-        stmt.execute(mesa);
-        stmt.execute(reserva);
-        stmt.execute(cardapio);
+        String comanda = "CREATE TABLE IF NOT EXISTS Comanda(\n" +
+                "\tid_comanda INT AUTO_INCREMENT PRIMARY KEY,\n" +
+                "    id_item INT NOT NULL,\n" +
+                "    id_mesa INT NOT NULL,\n" +
+                "\tqnt_item INT NOT NULL,\n" +
+                "    FOREIGN KEY (id_item) REFERENCES Cardapio(id_item),\n" +
+                "    FOREIGN KEY (id_mesa) REFERENCES Mesa(id_mesa),\n" +
+                "    CONSTRAINT comanda_item_mesa UNIQUE (id_item, id_mesa)\n" +
+                ");";
+
+        String Usuario = "CREATE TABLE IF NOT EXISTS USUARIO (\n" +
+                "    id INT AUTO_INCREMENT PRIMARY KEY,\n" +
+                "    nome VARCHAR(100) NOT NULL,\n" +
+                "    nomeUsuario VARCHAR(50) NOT NULL UNIQUE,\n" +
+                "    email VARCHAR(100) NOT NULL UNIQUE,\n" +
+                "    senha VARCHAR(100) NOT NULL,\n" +
+                "    role ENUM('gerente', 'garcom') NOT NULL\n" +
+                ");";
+
+        Statement st = criarConexao().createStatement();
+        st.execute(cliente);
+        st.execute(mesa);
+        st.execute(reserva);
+        st.execute(cardapio);
+        st.execute(comanda);
+        st.execute(Usuario);
     }
 }

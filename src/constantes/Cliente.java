@@ -1,14 +1,22 @@
 package constantes;
 
 public class Cliente {
-    private int id;
+    private int id_cliente;
     private String nomeCliente;
     private String cpf;
     private String telefone;
     private String email;
 
-    public Cliente(int id, String nomeCliente, String cpf, String telefone, String email) {
-        this.id = id;
+
+    public Cliente(String nomeCliente, String cpf, String telefone, String email) {
+        this.nomeCliente = nomeCliente;
+        this.cpf = cpf;
+        this.telefone = telefone;
+        this.email = email;
+    }
+
+    public Cliente(int id_cliente, String nomeCliente, String cpf, String telefone, String email) {
+        this.id_cliente = id_cliente;
         this.nomeCliente = nomeCliente;
         this.cpf = cpf;
         this.telefone = telefone;
@@ -16,11 +24,11 @@ public class Cliente {
     }
 
     public int getId() {
-        return id;
+        return id_cliente;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setId(int id_cliente) {
+        this.id_cliente = id_cliente;
     }
 
     public String getNomeCliente() {

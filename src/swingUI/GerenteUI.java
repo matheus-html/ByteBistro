@@ -35,6 +35,7 @@ public class GerenteUI extends Painel {
             int input = JOptionPane.showConfirmDialog(GerenteUI.this, "Tem certeza que deseja voltar para a tela de login?");
             if (input == JOptionPane.YES_OPTION) {
                 new LoginUI().setVisible(true);
+                GerenteUI.this.dispose();
             }
         });
         add(voltarBotao);
