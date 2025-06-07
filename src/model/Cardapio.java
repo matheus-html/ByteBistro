@@ -1,4 +1,4 @@
-package constantes;
+package model;
 
 public class Cardapio {
     private int id_item;
@@ -6,6 +6,13 @@ public class Cardapio {
     private String descricao;
     private double preco;
     private String categoria;
+
+    public Cardapio(String nome_item, String descricao, double preco, String categoria) {
+        this.nome_item = nome_item;
+        this.descricao = descricao;
+        this.preco = preco;
+        this.categoria = categoria;
+    }
 
     public Cardapio(int id_item, String nome_item, String descricao, double preco, String categoria) {
         this.id_item = id_item;

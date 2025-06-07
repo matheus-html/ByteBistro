@@ -1,4 +1,4 @@
-package constantes;
+package model;
 
 public class Cliente {
     private int id_cliente;
@@ -6,7 +6,6 @@ public class Cliente {
     private String cpf;
     private String telefone;
     private String email;
-
 
     public Cliente(String nomeCliente, String cpf, String telefone, String email) {
         this.nomeCliente = nomeCliente;

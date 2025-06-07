@@ -1,14 +1,13 @@
 package service;
 
-import constantes.BancoConfig;
-import constantes.Cliente;
+import model.Cliente;
 
 import java.sql.*;
 import java.util.ArrayList;
 
 public class ClienteDAO {
 
-    public void inserirCliente(Cliente cliente){
+    public boolean inserirCliente(Cliente cliente) throws SQLException{
         String sql = "INSERT INTO Cliente (nome_cliente, cpf, telefone, email) VALUES (?,?,?,?)";
 
         try(Connection conexao = BancoConfig.criarConexao();
@@ -18,10 +17,13 @@ public class ClienteDAO {
             ps.setString(2, cliente.getCpf());
             ps.setString(3, cliente.getTelefone());
             ps.setString(4, cliente.getEmail());
-            ps.executeUpdate();
+
+            int linhasAfetadas = ps.executeUpdate();
+            return linhasAfetadas > 0;
 
         } catch(SQLException e){
             System.err.println("Erro ao cadastrar cliente: " + e.getMessage());
+            throw e;
         }
     }
 
@@ -49,7 +51,7 @@ public class ClienteDAO {
         return clientes;
     }
 
-    public void atualizarCliente(Cliente clienteAtualizado) throws SQLException {
+    public boolean atualizarCliente(Cliente clienteAtualizado) throws SQLException {
         String sql = "UPDATE Cliente SET nome_cliente = ? , cpf = ?, telefone = ?, email = ? WHERE id_cliente = ?";
 
         try(Connection conexao = BancoConfig.criarConexao();
@@ -65,11 +67,14 @@ public class ClienteDAO {
 
             if(linhasAfetadas > 0){
                 System.out.println("Cliente atualizado.");
+                return true;
             } else{
                 System.out.println("Nenhum cliente foi modificado.");
+                return false;
             }
         } catch(SQLException e){
             System.err.println("Erro ao atualizar cliente: " + e.getMessage());
+            throw e;
         }
     }
 

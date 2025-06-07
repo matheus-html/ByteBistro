@@ -1,4 +1,4 @@
-package constantes;
+package service;
 
 import java.sql.*;
 
@@ -38,8 +38,8 @@ public class BancoConfig {
                 "    id_mesa INT NOT NULL,\n" +
                 "    data_hora DATETIME NOT NULL,\n" +
                 "    num_pessoas INT NOT NULL,\n" +
-                "    FOREIGN KEY (id_cliente) REFERENCES Cliente(id_cliente),\n" +
-                "    FOREIGN KEY (id_mesa) REFERENCES Mesa(id_mesa),\n" +
+                "    FOREIGN KEY (id_cliente) REFERENCES Cliente(id_cliente) ON DELETE CASCADE,\n" +
+                "    FOREIGN KEY (id_mesa) REFERENCES Mesa(id_mesa) ON DELETE CASCADE,\n" +
                 "    CONSTRAINT reserva_mesa_data UNIQUE (id_mesa, data_hora)\n" +
                 ");";
 
@@ -56,8 +56,8 @@ public class BancoConfig {
                 "    id_item INT NOT NULL,\n" +
                 "    id_mesa INT NOT NULL,\n" +
                 "\tqnt_item INT NOT NULL,\n" +
-                "    FOREIGN KEY (id_item) REFERENCES Cardapio(id_item),\n" +
-                "    FOREIGN KEY (id_mesa) REFERENCES Mesa(id_mesa),\n" +
+                "    FOREIGN KEY (id_item) REFERENCES Cardapio(id_item) ON DELETE CASCADE,\n" +
+                "    FOREIGN KEY (id_mesa) REFERENCES Mesa(id_mesa) ON DELETE CASCADE,\n" +
                 "    CONSTRAINT comanda_item_mesa UNIQUE (id_item, id_mesa)\n" +
                 ");";
 
@@ -70,12 +70,17 @@ public class BancoConfig {
                 "    role ENUM('gerente', 'garcom') NOT NULL\n" +
                 ");";
 
-        Statement st = criarConexao().createStatement();
-        st.execute(cliente);
-        st.execute(mesa);
-        st.execute(reserva);
-        st.execute(cardapio);
-        st.execute(comanda);
-        st.execute(Usuario);
+        try(Connection conexao = BancoConfig.criarConexao();
+        Statement st = conexao.createStatement()){
+            st.execute(cliente);
+            st.execute(mesa);
+            st.execute(reserva);
+            st.execute(cardapio);
+            st.execute(comanda);
+            st.execute(Usuario);
+            System.out.println("Tabelas criadas ou já existentes.");
+        }catch (SQLException e){
+            System.err.println("Erro ao criar Tabelas." + e.getMessage());
+        }
     }
 }

@@ -1,10 +1,16 @@
-package constantes;
+package model;
 
 public class Mesa {
     private int id_mesa;
     private int capacidade;
     private String localizacao;
     private String statusMesa;
+
+    public Mesa(int capacidade, String localizacao, String statusMesa) {
+        this.capacidade = capacidade;
+        this.localizacao = localizacao;
+        this.statusMesa = statusMesa;
+    }
 
     public Mesa(int id_mesa, int capacidade, String localizacao, String statusMesa) {
         this.id_mesa = id_mesa;

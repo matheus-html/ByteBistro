@@ -1,10 +1,7 @@
 package service;
 
-import com.sun.security.jgss.GSSUtil;
-import constantes.BancoConfig;
-import constantes.Cardapio;
+import model.Cardapio;
 
-import javax.smartcardio.Card;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -15,12 +12,9 @@ public class CardapioDAO {
 
     public void inserirItem(Cardapio itemCardapio) {
         String sql = "INSERT INTO Cardapio (nome_item, descricao, preco, categoria) VALUES (?,?,?,?)";
-        Connection conexao = null;
-        PreparedStatement ps = null;
 
-        try{
-            conexao = BancoConfig.criarConexao();
-            ps = conexao.prepareStatement(sql);
+        try(Connection conexao = BancoConfig.criarConexao();
+            PreparedStatement ps = conexao.prepareStatement(sql)){
 
             ps.setString(1,itemCardapio.getNome_item());
             ps.setString(2,itemCardapio.getDescricao());
@@ -30,33 +24,16 @@ public class CardapioDAO {
 
         }catch (SQLException e){
             e.printStackTrace();
-        }finally {
-            try{
-                if (ps != null){
-                    ps.close();
-                }
-                if (conexao != null){
-                    conexao.close();
-                }
-            }catch (Exception e){
-                e.printStackTrace();
-            }
         }
     }
 
     public ArrayList<Cardapio> listarItens(){
         ArrayList<Cardapio> itensCardapio = new ArrayList<Cardapio>();
-
         String sql = "SELECT * FROM Cardapio";
 
-        Connection conexao = null;
-        PreparedStatement ps = null;
-        ResultSet rs = null;
-
-        try{
-            conexao = BancoConfig.criarConexao();
-            ps = conexao.prepareStatement(sql);
-            rs = ps.executeQuery();
+        try(Connection conexao = BancoConfig.criarConexao();
+            PreparedStatement ps = conexao.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery()){
 
             while (rs.next()) {
                 int id = rs.getInt(1);
@@ -68,36 +45,43 @@ public class CardapioDAO {
                 Cardapio itemCardapio = new Cardapio(id, nome_item, descricao, preco, categoria);
                 itensCardapio.add(itemCardapio);
             }
-
         } catch (SQLException e){
             e.printStackTrace();
-        } finally {
-            try{
-                if (rs != null){
-                    rs.close();
+        }
+        return itensCardapio;
+    }
+
+    public ArrayList<Cardapio> listarItensPorCategoria(String categoria){
+        ArrayList<Cardapio> itensCardapio = new ArrayList<>();
+        String sql = "SELECT * FROM Cardapio WHERE categoria = ?";
+
+        try (Connection conexao = BancoConfig.criarConexao();
+             PreparedStatement ps = conexao.prepareStatement(sql)) {
+
+            ps.setString(1, categoria);
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    int id = rs.getInt(1);
+                    String nome_item = rs.getString(2);
+                    String descricao = rs.getString(3);
+                    double preco = rs.getDouble(4);
+                    String cat = rs.getString(5);
+
+                    Cardapio itemCardapio = new Cardapio(id, nome_item, descricao, preco, cat);
+                    itensCardapio.add(itemCardapio);
                 }
-                if (ps != null){
-                    ps.close();
-                }
-                if (conexao != null){
-                    conexao.close();
-                }
-            }catch (Exception e){
-                e.printStackTrace();
             }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
         return itensCardapio;
     }
 
     public void alterarItem(Cardapio itemCardapio) {
-        String sql = "UPDATE Cardapio SET nome_item = ?, descricao = ?, preco = ?, categoria = ? WHERE id = ?";
+        String sql = "UPDATE Cardapio SET nome_item = ?, descricao = ?, preco = ?, categoria = ? WHERE id_item = ?";
 
-        Connection conexao = null;
-        PreparedStatement ps = null;
-
-        try{
-            conexao = BancoConfig.criarConexao();
-            ps = conexao.prepareStatement(sql);
+        try(Connection conexao = BancoConfig.criarConexao();
+            PreparedStatement ps = conexao.prepareStatement(sql)){
 
             ps.setString(1,itemCardapio.getNome_item());
             ps.setString(2,itemCardapio.getDescricao());
@@ -114,28 +98,15 @@ public class CardapioDAO {
             }
         } catch (SQLException e){
             e.printStackTrace();
-        } finally {
-            try{
-                if (ps != null){
-                    ps.close();
-                }
-                if (conexao != null){
-                    conexao.close();
-                }
-            }catch (Exception e){
-                e.printStackTrace();
-            }
         }
     }
 
     public void excluirItem(int id) {
-        String sql = "DELETE FROM Cardapio WHERE id = ?";
-        Connection conexao = null;
-        PreparedStatement ps = null;
+        String sql = "DELETE FROM Cardapio WHERE id_item = ?";
 
-        try{
-            conexao = BancoConfig.criarConexao();
-            ps = conexao.prepareStatement(sql);
+        try(Connection conexao = BancoConfig.criarConexao();
+            PreparedStatement ps = conexao.prepareStatement(sql)){
+
             ps.setInt(1,id);
 
             int retorno = ps.executeUpdate();
@@ -146,17 +117,6 @@ public class CardapioDAO {
             }
         }catch (SQLException e){
             e.printStackTrace();
-        } finally {
-            try{
-                if (ps != null){
-                    ps.close();
-                }
-                if (conexao != null){
-                    conexao.close();
-                }
-            }catch (Exception e){
-                e.printStackTrace();
-            }
         }
     }
 }

@@ -1,10 +1,10 @@
-package swingUI;
+package swingUI.registro;
 
-import constantes.Painel;
+import swingUI.constants.MainPainel;
 
 import javax.swing.*;
 
-public class RegistroUI extends Painel {
+public class RegistroUI extends MainPainel {
     public RegistroUI() {
         super("Registro");
         addComponentesRegistro();

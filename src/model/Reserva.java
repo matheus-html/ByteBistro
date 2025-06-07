@@ -1,4 +1,4 @@
-package constantes;
+package model;
 
 import java.sql.Timestamp;
 

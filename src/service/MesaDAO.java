@@ -1,21 +1,17 @@
 package service;
 
-import constantes.BancoConfig;
-import constantes.Mesa;
+import model.Mesa;
 
 import java.sql.*;
 import java.util.ArrayList;
 
 public class MesaDAO {
 
-    public void inserirMesa(Mesa mesa){
+    public void inserirMesa(Mesa mesa) throws SQLException {
         String sql = "INSERT INTO Mesa (capacidade, localizacao, statusMesa) VALUES (?,?,?)";
-        Connection conexao = null;
-        PreparedStatement ps = null;
 
-        try{
-            conexao = BancoConfig.criarConexao();
-            ps = conexao.prepareStatement(sql);
+        try(Connection conexao = BancoConfig.criarConexao();
+            PreparedStatement ps = conexao.prepareStatement(sql)){
 
             ps.setInt(1, mesa.getCapacidade());
             ps.setString(2, mesa.getLocalizacao());
@@ -24,17 +20,7 @@ public class MesaDAO {
 
         } catch (SQLException e) {
             System.err.println("Houve um erro ao inserir mesa: " + e.getMessage());
-        } finally {
-            try{
-                if(ps != null){
-                    ps.close();
-                }
-                if(conexao != null){
-                    conexao.close();
-                }
-            }catch (SQLException e){
-                e.printStackTrace();
-            }
+            throw e;
         }
     }
 
@@ -42,14 +28,9 @@ public class MesaDAO {
         ArrayList<Mesa> mesas = new ArrayList<>();
         String sql = "SELECT * FROM Mesa";
 
-        Connection conexao = null;
-        Statement st = null;
-        ResultSet rs = null;
-
-        try{
-            conexao = BancoConfig.criarConexao();
-            st = conexao.createStatement();
-            rs = st.executeQuery(sql);
+        try(Connection conexao = BancoConfig.criarConexao();
+            PreparedStatement ps = conexao.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery(sql)){
 
             while(rs.next()){
                 int id = rs.getInt("id_mesa");
@@ -67,37 +48,15 @@ public class MesaDAO {
             }
         } catch(SQLException e){
             e.printStackTrace();
-        } finally {
-            try{
-                if(rs != null){
-                    rs.close();
-                }
-                if(st != null){
-                    st.close();
-                }
-                if(conexao != null){
-                    conexao.close();
-                }
-            } catch (SQLException e){
-                e.printStackTrace();
-            }
-
-            if(mesas.isEmpty()){
-                System.out.println("Nenhuma mesa registrada.");
-            }
         }
         return mesas;
     }
 
-    public void editarMesa(Mesa mesa){
+    public void editarMesa(Mesa mesa) throws SQLException {
         String sql = "UPDATE Mesa SET capacidade = ?, " + "localizacao = ?, " + "statusMesa = ? WHERE id_mesa = ?";
 
-        Connection conexao = null;
-        PreparedStatement ps = null;
-
-        try{
-            conexao = BancoConfig.criarConexao();
-            ps = conexao.prepareStatement(sql);
+        try(Connection conexao = BancoConfig.criarConexao();
+            PreparedStatement ps = conexao.prepareStatement(sql)){
 
             ps.setInt(1, mesa.getCapacidade());
             ps.setString(2, mesa.getLocalizacao());
@@ -114,28 +73,15 @@ public class MesaDAO {
 
         } catch(SQLException e){
             e.printStackTrace();
-        } finally {
-            try{
-                if(ps != null){
-                    ps.close();
-                }
-                if(conexao != null){
-                    conexao.close();
-                }
-            } catch (SQLException e){
-                e.printStackTrace();
-            }
+            throw e;
         }
     }
 
     public void removerMesa(int id_mesa){
         String sql = "DELETE FROM Mesa WHERE id_mesa = ?";
-        Connection conexao = null;
-        PreparedStatement ps = null;
 
-        try{
-            conexao = BancoConfig.criarConexao();
-            ps = conexao.prepareStatement(sql);
+        try(Connection conexao = BancoConfig.criarConexao();
+            PreparedStatement ps = conexao.prepareStatement(sql)){
 
             ps.setInt(1, id_mesa);
 
@@ -148,17 +94,6 @@ public class MesaDAO {
             }
         }catch (SQLException e){
             e.printStackTrace();
-        } finally{
-            try {
-                if(ps != null){
-                    ps.close();
-                }
-                if(conexao != null){
-                    conexao.close();
-                }
-            } catch (SQLException e){
-                e.printStackTrace();
-            }
         }
     }
 }

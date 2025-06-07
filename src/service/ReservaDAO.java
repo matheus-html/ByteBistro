@@ -1,7 +1,6 @@
 package service;
 
-import constantes.BancoConfig;
-import constantes.Reserva;
+import model.Reserva;
 
 import java.sql.*;
 import java.util.ArrayList;
