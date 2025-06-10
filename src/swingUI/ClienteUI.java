@@ -155,6 +155,11 @@ public class ClienteUI extends MainPainel {
                 return;
             }
 
+            if (!nomeCliente.matches("^[\\p{L} .'-]+$")) {
+                JOptionPane.showMessageDialog(this, "Nome inválido. Apenas letras, espaços, pontos, apóstrofos e hifens são permitidos.", "Erro de Validação", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+
             if (cpf.length() != 11) {
                 JOptionPane.showMessageDialog(this, "CPF inválido. Insira exatamente 11 dígitos numéricos.", "Erro de Validação", JOptionPane.WARNING_MESSAGE);
                 return;
@@ -248,6 +253,11 @@ public class ClienteUI extends MainPainel {
 
             if (nomeCliente.isEmpty() || cpf.isEmpty() || telefone.isEmpty() || email.isEmpty()) {
                 JOptionPane.showMessageDialog(this, "Todos os campos devem ser preenchidos!", "Erro de Validação", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+
+            if (!nomeCliente.matches("^[\\p{L} .'-]+$")) {
+                JOptionPane.showMessageDialog(this, "Nome inválido. Apenas letras, espaços, pontos, apóstrofos e hifens são permitidos.", "Erro de Validação", JOptionPane.WARNING_MESSAGE);
                 return;
             }
 

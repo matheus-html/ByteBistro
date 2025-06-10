@@ -265,6 +265,20 @@ public class ReservaUI extends MainPainel {
             campoIdMesa.setText(String.valueOf(reservaParaEditar.getId_mesa()));
             campoDataHora.setText(formatarTimestamp(reservaParaEditar.getData_hora()));
             campoNumPessoas.setText(String.valueOf(reservaParaEditar.getNum_pessoas()));
+        } else {
+            int linhaClienteSelecionada = tabelaClientes.getSelectedRow();
+            if (linhaClienteSelecionada != -1) {
+                int idClienteSelecionado = (int) modeloTabelaClientes.getValueAt(linhaClienteSelecionada, 0);
+                campoIdCliente.setText(String.valueOf(idClienteSelecionado));
+                campoIdCliente.setEditable(false);
+            }
+
+            int linhaMesaSelecionada = tabelaMesas.getSelectedRow();
+            if (linhaMesaSelecionada != -1) {
+                int idMesaSelecionada = (int) modeloTabelaMesas.getValueAt(linhaMesaSelecionada, 0);
+                campoIdMesa.setText(String.valueOf(idMesaSelecionada));
+                campoIdMesa.setEditable(false);
+            }
         }
 
         JPanel painelDialogo = new JPanel(new GridLayout(0, 2, 10, 10));
@@ -336,7 +350,6 @@ public class ReservaUI extends MainPainel {
         }
     }
 
-
     private void editarReservaSelecionada() {
         int linhaSelecionada = tabelaReservas.getSelectedRow();
         if (linhaSelecionada == -1) {
@@ -349,7 +362,7 @@ public class ReservaUI extends MainPainel {
             int idCliente = (int) modeloTabelaReservas.getValueAt(linhaSelecionada, 1);
             int idMesa = (int) modeloTabelaReservas.getValueAt(linhaSelecionada, 2);
             String dataHoraStr = (String) modeloTabelaReservas.getValueAt(linhaSelecionada, 3);
-            
+
             Timestamp dataHora = Timestamp.valueOf(LocalDateTime.parse(dataHoraStr, FORMATADOR_DATA_HORA));
             int numPessoas = (int) modeloTabelaReservas.getValueAt(linhaSelecionada, 4);
 
