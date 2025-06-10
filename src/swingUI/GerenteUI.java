@@ -89,7 +89,7 @@ public class GerenteUI extends MainPainel {
         btnVoltarLogin.setForeground(CoresUI.primary_color);
         btnVoltarLogin.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         btnVoltarLogin.addActionListener(e -> {
-            int op = JOptionPane.showConfirmDialog(null, "Deseja retornar para a tela de Login?", "Voltar para tela de LoginDAO", JOptionPane.YES_NO_OPTION);
+            int op = JOptionPane.showConfirmDialog(null, "Deseja retornar para a tela de Login?", "Voltar para tela de Login", JOptionPane.YES_NO_OPTION);
 
             if(op == JOptionPane.YES_OPTION){
                 new LoginUI().setVisible(true);
