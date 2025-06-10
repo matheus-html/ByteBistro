@@ -1,7 +1,7 @@
 package controller;
 
 import service.BancoConfig;
-import swingUI.ReservaUI;
+import swingUI.LoginUI;
 
 import javax.swing.*;
 import java.sql.SQLException;
@@ -12,7 +12,7 @@ public class ByteBistroController extends JFrame {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run(){
-            new ReservaUI("admin").setVisible(true);
+            new LoginUI().setVisible(true);
             }
         });
     }
