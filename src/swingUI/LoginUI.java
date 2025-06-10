@@ -1,10 +1,8 @@
-package swingUI.login;
+package swingUI;
 
 import service.LoginDAO;
-import swingUI.constants.CoresUI;
-import swingUI.garcom.GarcomUI;
-import swingUI.gerente.GerenteUI;
-import swingUI.constants.MainPainel;
+import swingUI.constantes.CoresUI;
+import swingUI.constantes.MainPainel;
 
 import javax.swing.*;
 import java.awt.*;

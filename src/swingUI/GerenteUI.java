@@ -1,13 +1,7 @@
-package swingUI.gerente;
+package swingUI;
 
-import swingUI.CardapioUI;
-import swingUI.comanda.ComandaUI;
-import swingUI.mesa.MesaUI;
-import swingUI.cliente.ClienteUI;
-import swingUI.constants.CoresUI;
-import swingUI.constants.MainPainel;
-import swingUI.login.LoginUI;
-import swingUI.ReservaUI;
+import swingUI.constantes.CoresUI;
+import swingUI.constantes.MainPainel;
 
 import javax.swing.*;
 import java.awt.*;
@@ -28,17 +22,6 @@ public class GerenteUI extends MainPainel {
         int alturaBotao = 60;
         int espacoEntreBotoes = 20;
         int yInicial = 180;
-
-//        JButton btnGerenciarUsuarios = new JButton("Gerenciar Usuários");
-//        btnGerenciarUsuarios.setFont(new Font("SansSerif", Font.BOLD, 20));
-//        btnGerenciarUsuarios.setBackground(CoresUI.primary_color.brighter());
-//        btnGerenciarUsuarios.setForeground(CoresUI.text_color);
-//        btnGerenciarUsuarios.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-//        btnGerenciarUsuarios.setBorder(BorderFactory.createLineBorder(CoresUI.accent_color, 2, true));
-//        btnGerenciarUsuarios.addActionListener(e -> {
-//            JOptionPane.showMessageDialog(this, "Gerenciar Usuários clicado!");
-//        });
-//        posicionarComponenteCentralizado(btnGerenciarUsuarios, yInicial, larguraBotao, alturaBotao);
 
         JButton btnGerenciarClientes = new JButton("Gerenciar Clientes");
         btnGerenciarClientes.setFont(new Font("SansSerif", Font.BOLD, 20));
@@ -71,7 +54,7 @@ public class GerenteUI extends MainPainel {
         btnGerenciarReservas.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         btnGerenciarReservas.setBorder(BorderFactory.createLineBorder(CoresUI.accent_color, 2, true));
         btnGerenciarReservas.addActionListener(e -> {
-            new ReservaUI(this.userRole).setVisible(true); // Passando a role
+            new ReservaUI(this.userRole).setVisible(true);
             dispose();
         });
         posicionarComponenteCentralizado(btnGerenciarReservas, yInicial + 3 * (alturaBotao + espacoEntreBotoes), larguraBotao, alturaBotao);
@@ -95,7 +78,7 @@ public class GerenteUI extends MainPainel {
         btnGerenciarComandas.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         btnGerenciarComandas.setBorder(BorderFactory.createLineBorder(CoresUI.accent_color, 2, true));
         btnGerenciarComandas.addActionListener(e -> {
-            new ComandaUI(this.userRole).setVisible(true); // Passando a role
+            new ComandaUI(this.userRole).setVisible(true);
             dispose();
         });
         posicionarComponenteCentralizado(btnGerenciarComandas, yInicial + 5 * (alturaBotao + espacoEntreBotoes), larguraBotao, alturaBotao);

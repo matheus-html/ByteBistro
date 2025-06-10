@@ -1,16 +1,13 @@
-package swingUI.comanda;
+package swingUI;
 
 import model.Comanda;
 import model.Mesa;
 import model.Cardapio;
-import service.ClienteDAO;
 import service.ComandaDAO;
 import service.MesaDAO;
 import service.CardapioDAO;
-import swingUI.constants.CoresUI;
-import swingUI.constants.MainPainel;
-import swingUI.garcom.GarcomUI;
-import swingUI.gerente.GerenteUI;
+import swingUI.constantes.CoresUI;
+import swingUI.constantes.MainPainel;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -39,36 +36,28 @@ public class ComandaUI extends MainPainel {
     }
 
     private void adicionarComponentesComanda() {
-        // MainPainel já configura o layout como null e o background do content pane.
-        // Não é necessário chamar setLayout, setBackground ou setBorder diretamente aqui
-        // no JFrame principal.
 
-        // Obtém as dimensões atuais do content pane do JFrame (definidas por MainPainel)
         int frameWidth = getContentPane().getWidth();
         int frameHeight = getContentPane().getHeight();
 
-        int margin = 20; // Margem geral para os painéis
-        int currentY = margin; // Posição Y inicial
+        int margin = 20;
+        int currentY = margin;
 
-        // Título Centralizado
         JLabel tituloLabel = new JLabel("GERENCIAMENTO DE COMANDAS");
         tituloLabel.setForeground(CoresUI.accent_color);
         tituloLabel.setFont(new Font("SansSerif", Font.BOLD, 30));
-        // Usa o método do MainPainel para centralizar e adicionar o título
         posicionarLabelCentralizado(tituloLabel, currentY, frameWidth - (2 * margin), 40);
-        currentY += 40 + margin; // Atualiza a posição Y para o próximo componente
+        currentY += 40 + margin;
 
-        // Painel Superior para Mesas e Cardápio
         JPanel painelSuperior = new JPanel(new GridLayout(1, 2, 10, 0));
         painelSuperior.setBackground(CoresUI.primary_color);
-        painelSuperior.setBorder(BorderFactory.createEmptyBorder(0, 0, 5, 0)); // Borda interna do painel
+        painelSuperior.setBorder(BorderFactory.createEmptyBorder(0, 0, 5, 0));
 
-        int panelSuperiorHeight = (frameHeight - (4 * margin) - 40 - 20 - 80) / 2; // Distribui o espaço vertical
+        int panelSuperiorHeight = (frameHeight - (4 * margin) - 40 - 20 - 80) / 2;
         painelSuperior.setBounds(margin, currentY, frameWidth - (2 * margin), panelSuperiorHeight);
         getContentPane().add(painelSuperior);
-        currentY += panelSuperiorHeight + margin; // Atualiza a posição Y
+        currentY += panelSuperiorHeight + margin;
 
-        // Tabela de Mesas dentro do painelSuperior
         String[] colunasMesas = {"ID Mesa", "Capacidade", "Localização", "Status"};
         modeloTabelaMesas = new DefaultTableModel(colunasMesas, 0) {
             @Override
@@ -82,7 +71,7 @@ public class ComandaUI extends MainPainel {
         scrollMesas.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(CoresUI.accent_color, 1), "Mesas", 0, 0, new Font("SansSerif", Font.BOLD, 14), CoresUI.accent_color));
         painelSuperior.add(scrollMesas);
 
-        // Tabela de Cardápio dentro do painelSuperior
+
         String[] colunasCardapio = {"ID Item", "Nome Item", "Preço", "Categoria"};
         modeloTabelaCardapio = new DefaultTableModel(colunasCardapio, 0) {
             @Override
@@ -96,17 +85,15 @@ public class ComandaUI extends MainPainel {
         scrollCardapio.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(CoresUI.accent_color, 1), "Cardápio", 0, 0, new Font("SansSerif", Font.BOLD, 14), CoresUI.accent_color));
         painelSuperior.add(scrollCardapio);
 
-        // Painel Central para Comandas da Mesa Selecionada
         JPanel painelCentral = new JPanel(new BorderLayout());
         painelCentral.setBackground(CoresUI.primary_color);
-        painelCentral.setBorder(BorderFactory.createEmptyBorder(5, 0, 0, 0)); // Borda interna do painel
+        painelCentral.setBorder(BorderFactory.createEmptyBorder(5, 0, 0, 0));
 
-        int panelCentralHeight = panelSuperiorHeight; // Mesma altura do painel superior
+        int panelCentralHeight = panelSuperiorHeight;
         painelCentral.setBounds(margin, currentY, frameWidth - (2 * margin), panelCentralHeight);
         getContentPane().add(painelCentral);
-        currentY += panelCentralHeight + margin; // Atualiza a posição Y
+        currentY += panelCentralHeight + margin;
 
-        // Tabela de Comandas dentro do painelCentral
         String[] colunasComandas = {"ID Comanda", "ID Item", "ID Mesa", "Quantidade"};
         modeloTabelaComandas = new DefaultTableModel(colunasComandas, 0) {
             @Override
@@ -120,18 +107,16 @@ public class ComandaUI extends MainPainel {
         scrollComandas.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(CoresUI.accent_color, 1), "Comandas da Mesa Selecionada", 0, 0, new Font("SansSerif", Font.BOLD, 14), CoresUI.accent_color));
         painelCentral.add(scrollComandas, BorderLayout.CENTER);
 
-        // Painel de Botões
         JPanel painelBotoes = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 10));
         painelBotoes.setBackground(CoresUI.primary_color);
-        painelBotoes.setBorder(BorderFactory.createEmptyBorder(10, 0, 0, 0)); // Borda interna do painel
+        painelBotoes.setBorder(BorderFactory.createEmptyBorder(10, 0, 0, 0));
 
-        int panelBotoesHeight = 80; // Altura fixa para os botões
+        int panelBotoesHeight = 80;
         painelBotoes.setBounds(margin, currentY, frameWidth - (2 * margin), panelBotoesHeight);
         getContentPane().add(painelBotoes);
 
         Font fonteBotoes = new Font("SansSerif", Font.BOLD, 16);
 
-        // Criação e adição dos botões usando o método auxiliar
         JButton btnAdicionar = criarBotao("Adicionar Item à Comanda", CoresUI.success_color, CoresUI.primary_color, fonteBotoes, e -> mostrarDialogoCadastroEdicao(null));
         JButton btnEditar = criarBotao("Editar Item da Comanda", CoresUI.accent_color, CoresUI.primary_color, fonteBotoes, e -> editarComandaSelecionada());
         JButton btnRemover = criarBotao("Remover Item da Comanda", CoresUI.danger_color, CoresUI.text_color, fonteBotoes, e -> removerComandaSelecionada());
@@ -155,31 +140,28 @@ public class ComandaUI extends MainPainel {
         painelBotoes.add(btnPagarComandaMesa);
         painelBotoes.add(voltarBotao);
 
-        // Carrega os dados iniciais nas tabelas
         carregarMesasNaTabela();
         carregarCardapioNaTabela();
 
-        // Adiciona o ListSelectionListener para a tabela de mesas
+
         tabelaMesas.getSelectionModel().addListSelectionListener(e -> {
             if (!e.getValueIsAdjusting()) {
-                // Atualiza a tabela de comandas quando uma mesa é selecionada
                 mostrarComandasMesaSelecionada();
             }
         });
     }
 
-    // Método auxiliar para criar botões de forma consistente
+
     private JButton criarBotao(String texto, Color background, Color foreground, Font font, java.awt.event.ActionListener listener) {
         JButton button = new JButton(texto);
         button.setBackground(background);
         button.setForeground(foreground);
         button.setFont(font);
-        button.setFocusPainted(false); // Remove o foco visual após o clique
+        button.setFocusPainted(false);
         button.addActionListener(listener);
         return button;
     }
 
-    // Configurações de estilo comuns para as tabelas
     private void configurarTabela(JTable table) {
         table.setFont(new Font("SansSerif", Font.PLAIN, 14));
         table.setRowHeight(25);
@@ -188,12 +170,12 @@ public class ComandaUI extends MainPainel {
         table.getTableHeader().setFont(new Font("SansSerif", Font.BOLD, 14));
         table.getTableHeader().setBackground(CoresUI.secondary_color);
         table.getTableHeader().setForeground(CoresUI.text_color);
-        table.getTableHeader().setReorderingAllowed(false); // Impede reordenar colunas
-        table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION); // Permite selecionar apenas uma linha
+        table.getTableHeader().setReorderingAllowed(false);
+        table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
     }
 
     private void carregarMesasNaTabela() {
-        modeloTabelaMesas.setRowCount(0); // Limpa as linhas existentes
+        modeloTabelaMesas.setRowCount(0);
         try {
             ArrayList<Mesa> mesas = mesaDAO.listarMesas();
             for (Mesa mesa : mesas) {
@@ -206,9 +188,9 @@ public class ComandaUI extends MainPainel {
     }
 
     private void carregarCardapioNaTabela() {
-        modeloTabelaCardapio.setRowCount(0); // Limpa as linhas existentes
+        modeloTabelaCardapio.setRowCount(0);
         try {
-            ArrayList<Cardapio> itensCardapio = cardapioDAO.listarItens(); // Usando listarItens()
+            ArrayList<Cardapio> itensCardapio = cardapioDAO.listarItens();
             for (Cardapio item : itensCardapio) {
                 Object[] rowData = {item.getId_item(), item.getNome_item(), String.format("%.2f", item.getPreco()), item.getCategoria()};
                 modeloTabelaCardapio.addRow(rowData);
@@ -218,11 +200,10 @@ public class ComandaUI extends MainPainel {
         }
     }
 
-    // Mostra as comandas da mesa atualmente selecionada na tabela de mesas
     private void mostrarComandasMesaSelecionada() {
         int linhaSelecionada = tabelaMesas.getSelectedRow();
         if (linhaSelecionada == -1) {
-            modeloTabelaComandas.setRowCount(0); // Limpa a tabela se nenhuma mesa estiver selecionada
+            modeloTabelaComandas.setRowCount(0);
             return;
         }
 
@@ -230,9 +211,8 @@ public class ComandaUI extends MainPainel {
         carregarComandasDaMesaSelecionada(idMesa);
     }
 
-    // Carrega as comandas para um ID de mesa específico
     private void carregarComandasDaMesaSelecionada(int idMesa) {
-        modeloTabelaComandas.setRowCount(0); // Limpa as linhas existentes
+        modeloTabelaComandas.setRowCount(0);
         try {
             ArrayList<Comanda> comandas = comandaDAO.buscarComandasPorMesa(idMesa);
             for (Comanda comanda : comandas) {
@@ -244,22 +224,20 @@ public class ComandaUI extends MainPainel {
         }
     }
 
-    // Exibe o diálogo para adicionar ou editar uma comanda
     private void mostrarDialogoCadastroEdicao(Comanda comandaParaEditar) {
-        // Campos do diálogo são criados localmente
+
         JTextField campoIdItem = new JTextField();
         JTextField campoIdMesa = new JTextField();
         JTextField campoQuantidade = new JTextField();
 
         if (comandaParaEditar != null) {
-            // Preenche os campos para edição
+
             campoIdItem.setText(String.valueOf(comandaParaEditar.getId_item()));
             campoIdMesa.setText(String.valueOf(comandaParaEditar.getId_mesa()));
             campoQuantidade.setText(String.valueOf(comandaParaEditar.getQnt_item()));
-            campoIdMesa.setEditable(false); // Não permite mudar a mesa ao editar
-            campoIdItem.setEditable(false); // Não permite mudar o item ao editar
+            campoIdMesa.setEditable(false);
+            campoIdItem.setEditable(false);
         } else {
-            // Pré-preenche ID da mesa se uma mesa estiver selecionada
             int linhaMesaSelecionada = tabelaMesas.getSelectedRow();
             if (linhaMesaSelecionada != -1) {
                 int idMesaSelecionada = (int) modeloTabelaMesas.getValueAt(linhaMesaSelecionada, 0);
@@ -267,7 +245,6 @@ public class ComandaUI extends MainPainel {
                 campoIdMesa.setEditable(false);
             }
 
-            // Pré-preenche ID do item se um item do cardápio estiver selecionado
             int linhaCardapioSelecionado = tabelaCardapio.getSelectedRow();
             if (linhaCardapioSelecionado != -1) {
                 int idItemSelecionado = (int) modeloTabelaCardapio.getValueAt(linhaCardapioSelecionado, 0);
@@ -297,8 +274,6 @@ public class ComandaUI extends MainPainel {
                 if (quantidade <= 0) {
                     throw new IllegalArgumentException("A quantidade deve ser maior que zero.");
                 }
-
-                // Valida se ID do item e da mesa existem usando listarItens e listarMesas
                 if (cardapioDAO.listarItens().stream().noneMatch(item -> item.getId_item() == idItem)) {
                     JOptionPane.showMessageDialog(this, "ID do Item não encontrado no Cardápio.", "Erro de Validação", JOptionPane.ERROR_MESSAGE);
                     return;
@@ -309,7 +284,6 @@ public class ComandaUI extends MainPainel {
                 }
 
                 if (comandaParaEditar == null) {
-                    // Lógica para adicionar novo item ou somar quantidade se já existir
                     Comanda comandaExistente = null;
                     ArrayList<Comanda> comandasMesa = comandaDAO.buscarComandasPorMesa(idMesa);
                     for (Comanda c : comandasMesa) {
@@ -330,12 +304,10 @@ public class ComandaUI extends MainPainel {
                         JOptionPane.showMessageDialog(this, "Item adicionado à comanda com sucesso!");
                     }
                 } else {
-                    // Lógica para editar a quantidade de uma comanda existente
                     comandaParaEditar.setQnt_item(quantidade);
                     comandaDAO.atualizarComanda(comandaParaEditar);
                     JOptionPane.showMessageDialog(this, "Comanda atualizada com sucesso!");
                 }
-                // Recarrega a tabela de comandas da mesa selecionada após a operação
                 mostrarComandasMesaSelecionada();
             } catch (NumberFormatException e) {
                 JOptionPane.showMessageDialog(this, "ID do Item, ID da Mesa e Quantidade devem ser números válidos.", "Erro de Formato", JOptionPane.ERROR_MESSAGE);
@@ -347,7 +319,6 @@ public class ComandaUI extends MainPainel {
         }
     }
 
-    // Prepara o diálogo para editar uma comanda selecionada
     private void editarComandaSelecionada() {
         int linhaSelecionada = tabelaComandas.getSelectedRow();
         if (linhaSelecionada == -1) {
@@ -355,7 +326,6 @@ public class ComandaUI extends MainPainel {
             return;
         }
 
-        // Obtém os dados da linha selecionada
         int idComanda = (int) modeloTabelaComandas.getValueAt(linhaSelecionada, 0);
         int idItem = (int) modeloTabelaComandas.getValueAt(linhaSelecionada, 1);
         int idMesa = (int) modeloTabelaComandas.getValueAt(linhaSelecionada, 2);
@@ -365,7 +335,6 @@ public class ComandaUI extends MainPainel {
         mostrarDialogoCadastroEdicao(comandaParaEditar);
     }
 
-    // Remove a comanda selecionada da tabela e do banco de dados
     private void removerComandaSelecionada() {
         int linhaSelecionada = tabelaComandas.getSelectedRow();
         if (linhaSelecionada == -1) {
@@ -380,14 +349,13 @@ public class ComandaUI extends MainPainel {
             try {
                 comandaDAO.removerComanda(idComanda);
                 JOptionPane.showMessageDialog(this, "Item da comanda removido com sucesso!");
-                mostrarComandasMesaSelecionada(); // Recarrega a tabela de comandas da mesa selecionada
+                mostrarComandasMesaSelecionada();
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(this, "Erro ao remover item da comanda: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
             }
         }
     }
 
-    // Exibe o preço total da comanda da mesa selecionada
     private void mostrarPrecoTotalMesa() {
         int linhaSelecionada = tabelaMesas.getSelectedRow();
         if (linhaSelecionada == -1) {
@@ -404,7 +372,6 @@ public class ComandaUI extends MainPainel {
         }
     }
 
-    // Paga a comanda da mesa selecionada, removendo todos os seus itens
     private void pagarComandaMesa() {
         int linhaSelecionada = tabelaMesas.getSelectedRow();
         if (linhaSelecionada == -1) {
@@ -419,7 +386,7 @@ public class ComandaUI extends MainPainel {
             try {
                 comandaDAO.removerComandasMesa(idMesa);
                 JOptionPane.showMessageDialog(this, "Comanda da mesa ID " + idMesa + " paga e removida com sucesso!");
-                mostrarComandasMesaSelecionada(); // Recarrega a tabela de comandas da mesa selecionada (agora vazia)
+                mostrarComandasMesaSelecionada();
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(this, "Erro ao pagar comanda: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
             }

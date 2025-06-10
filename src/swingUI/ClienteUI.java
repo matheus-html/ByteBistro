@@ -1,15 +1,16 @@
-package swingUI.cliente;
+package swingUI;
 
 import model.Cliente;
 import service.ClienteDAO;
-import swingUI.constants.CoresUI;
-import swingUI.constants.MainPainel;
-import swingUI.gerente.GerenteUI;
+import swingUI.constantes.CoresUI;
+import swingUI.constantes.MainPainel;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.text.MaskFormatter;
 import java.awt.*;
 import java.sql.SQLException;
+import java.text.ParseException;
 import java.util.ArrayList;
 
 public class ClienteUI extends MainPainel {
@@ -119,8 +120,19 @@ public class ClienteUI extends MainPainel {
 
     private void adicionarCliente() {
         JTextField campoNomeCliente = new JTextField();
-        JTextField campoCPF = new JTextField();
-        JTextField campoTelefone = new JTextField();
+        JFormattedTextField campoCPF = null;
+        JFormattedTextField campoTelefone = null;
+        try {
+            MaskFormatter cpfMask = new MaskFormatter("###.###.###-##");
+            cpfMask.setPlaceholderCharacter('_');
+            campoCPF = new JFormattedTextField(cpfMask);
+
+            MaskFormatter telefoneMask = new MaskFormatter("(##) #####-####");
+            telefoneMask.setPlaceholderCharacter('_');
+            campoTelefone = new JFormattedTextField(telefoneMask);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
         JTextField campoEmail = new JTextField();
 
         Object[] campos = {
@@ -134,11 +146,29 @@ public class ClienteUI extends MainPainel {
         if (resultado == JOptionPane.OK_OPTION) {
 
             String nomeCliente = campoNomeCliente.getText().trim();
-            String cpf = campoCPF.getText().trim();
-            String telefone = campoTelefone.getText().trim();
+            String cpf = campoCPF.getText().replaceAll("[^0-9]", "");
+            String telefone = campoTelefone.getText().replaceAll("[^0-9]", "");
             String email = campoEmail.getText().trim();
 
-            if (validadores(campoNomeCliente, campoCPF, campoTelefone, campoEmail, cpf, telefone, email)) return;
+            if (nomeCliente.isEmpty() || cpf.isEmpty() || telefone.isEmpty() || email.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Todos os campos devem ser preenchidos!");
+                return;
+            }
+
+            if (cpf.length() != 11) {
+                JOptionPane.showMessageDialog(this, "CPF inválido. Insira exatamente 11 dígitos numéricos.", "Erro de Validação", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+
+            if (telefone.length() != 11) {
+                JOptionPane.showMessageDialog(this, "Telefone inválido. Insira exatamente 11 dígitos (DDD + 9 dígitos).", "Erro de Validação", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+
+            if (!email.matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,6}$")) {
+                JOptionPane.showMessageDialog(this, "E-mail inválido. Verifique o formato.", "Erro de Validação", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
 
             String cpfFormatado = formatarCpf(cpf);
             String telefoneFormatado = formatarTelefone(telefone);
@@ -166,34 +196,8 @@ public class ClienteUI extends MainPainel {
         String apenasDigitos = telefone.replaceAll("[^0-9]", "");
         if (apenasDigitos.length() == 11) {
             return apenasDigitos.replaceAll("(\\d{2})(\\d{5})(\\d{4})", "($1) $2-$3");
-        } else if (apenasDigitos.length() == 10) {
-            return apenasDigitos.replaceAll("(\\d{2})(\\d{4})(\\d{4})", "($1) $2-$3");
         }
         return telefone;
-    }
-
-    private boolean validadores(JTextField campoNomeCliente, JTextField campoCPF, JTextField campoTelefone, JTextField campoEmail, String cpf, String telefone, String email) {
-        if(campoNomeCliente.getText().trim().isEmpty() || campoCPF.getText().trim().isEmpty() || campoTelefone.getText().trim().isEmpty() ||
-                campoEmail.getText().trim().isEmpty()) {
-        JOptionPane.showMessageDialog(this, "Todos os campos devem ser preenchidos!");
-            return true;
-        }
-
-        if (!cpf.matches("(\\d{3}\\.\\d{3}\\.\\d{3}-\\d{2})|(\\d{11})")) {
-            JOptionPane.showMessageDialog(this, "CPF inválido. Use o formato DDD.DDD.DDD-DD ou apenas 11 dígitos numéricos.", "Erro de Validação", JOptionPane.WARNING_MESSAGE);
-            return true;
-        }
-
-        if (!telefone.matches("\\d{11}")) {
-            JOptionPane.showMessageDialog(this, "Telefone inválido. Insira apenas 10 ou 11 dígitos (incluindo o DDD).", "Erro de Validação", JOptionPane.WARNING_MESSAGE);
-            return true;
-        }
-
-        if (!email.matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,6}$")) {
-            JOptionPane.showMessageDialog(this, "E-mail inválido. Verifique o formato.", "Erro de Validação", JOptionPane.WARNING_MESSAGE);
-            return true;
-        }
-        return false;
     }
 
     private void editarCliente() {
@@ -210,8 +214,21 @@ public class ClienteUI extends MainPainel {
         String emailAtual = (String) modeloTabela.getValueAt(linhaSelecionada, 4);
 
         JTextField campoNomeCliente = new JTextField(nomeAtual);
-        JTextField campoCPF = new JTextField(cpfAtual);
-        JTextField campoTelefone = new JTextField(telefoneAtual);
+        JFormattedTextField campoCPF = null;
+        JFormattedTextField campoTelefone = null;
+        try {
+            MaskFormatter cpfMask = new MaskFormatter("###.###.###-##");
+            cpfMask.setPlaceholderCharacter('_');
+            campoCPF = new JFormattedTextField(cpfMask);
+            campoCPF.setText(cpfAtual);
+
+            MaskFormatter telefoneMask = new MaskFormatter("(##) #####-####");
+            telefoneMask.setPlaceholderCharacter('_');
+            campoTelefone = new JFormattedTextField(telefoneMask);
+            campoTelefone.setText(telefoneAtual);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
         JTextField campoEmail = new JTextField(emailAtual);
 
         Object[] campos = {
@@ -225,19 +242,29 @@ public class ClienteUI extends MainPainel {
         if (resultado == JOptionPane.OK_OPTION) {
 
             String nomeCliente = campoNomeCliente.getText().trim();
-            String cpf = campoCPF.getText().trim();
-            String telefone = campoTelefone.getText().trim();
+            String cpf = campoCPF.getText().replaceAll("[^0-9]", "");
+            String telefone = campoTelefone.getText().replaceAll("[^0-9]", "");
             String email = campoEmail.getText().trim();
 
-            if (campoNomeCliente.getText().trim().isEmpty() ||
-                    campoCPF.getText().trim().isEmpty() ||
-                    campoTelefone.getText().trim().isEmpty() ||
-                    campoEmail.getText().trim().isEmpty()) {
+            if (nomeCliente.isEmpty() || cpf.isEmpty() || telefone.isEmpty() || email.isEmpty()) {
                 JOptionPane.showMessageDialog(this, "Todos os campos devem ser preenchidos!", "Erro de Validação", JOptionPane.WARNING_MESSAGE);
                 return;
             }
 
-            if (validadores(campoNomeCliente, campoCPF, campoTelefone, campoEmail, cpf, telefone, email)) return;
+            if (cpf.length() != 11) {
+                JOptionPane.showMessageDialog(this, "CPF inválido. Insira exatamente 11 dígitos numéricos.", "Erro de Validação", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+
+            if (telefone.length() != 11) {
+                JOptionPane.showMessageDialog(this, "Telefone inválido. Insira exatamente 11 dígitos (DDD + 9 dígitos).", "Erro de Validação", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+
+            if (!email.matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,6}$")) {
+                JOptionPane.showMessageDialog(this, "E-mail inválido. Verifique o formato.", "Erro de Validação", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
 
             String cpfFormatado = formatarCpf(cpf);
             String telefoneFormatado = formatarTelefone(telefone);
@@ -252,6 +279,7 @@ public class ClienteUI extends MainPainel {
             }
         }
     }
+
 
     private void removerCliente() {
         int linhaSelecionada = tabelaClientes.getSelectedRow();

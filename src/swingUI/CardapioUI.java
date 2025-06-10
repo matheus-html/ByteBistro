@@ -2,9 +2,8 @@ package swingUI;
 
 import model.Cardapio;
 import service.CardapioDAO;
-import swingUI.constants.CoresUI;
-import swingUI.constants.MainPainel;
-import swingUI.gerente.GerenteUI;
+import swingUI.constantes.CoresUI;
+import swingUI.constantes.MainPainel;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;

@@ -1,4 +1,4 @@
-package swingUI.constants;
+package swingUI.constantes;
 
 import java.awt.*;
 

@@ -1,10 +1,9 @@
-package swingUI.mesa;
+package swingUI;
 
 import model.Mesa;
 import service.MesaDAO;
-import swingUI.constants.CoresUI;
-import swingUI.constants.MainPainel;
-import swingUI.gerente.GerenteUI;
+import swingUI.constantes.CoresUI;
+import swingUI.constantes.MainPainel;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -181,8 +180,6 @@ public class MesaUI extends MainPainel {
             } catch (NumberFormatException e) {
                 JOptionPane.showMessageDialog(this, "Capacidade deve ser um número válido.", "Erro de Formato", JOptionPane.ERROR_MESSAGE);
             } catch (SQLException ex) {
-                // MySQL Error Code for Duplicate entry for key 'UNIQUE_KEY_NAME' is 1062
-                // SQLState for integrity constraint violation is 23000
                 if (ex.getSQLState().equals("23000") && ex.getErrorCode() == 1062) {
                     JOptionPane.showMessageDialog(this, "Erro: Já existe uma mesa com esta capacidade e localização.", "Erro de Duplicação", JOptionPane.ERROR_MESSAGE);
                 } else {

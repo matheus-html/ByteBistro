@@ -6,10 +6,8 @@ import service.ClienteDAO;
 import service.MesaDAO;
 import model.Cliente;
 import model.Mesa;
-import swingUI.constants.CoresUI;
-import swingUI.constants.MainPainel;
-import swingUI.garcom.GarcomUI;
-import swingUI.gerente.GerenteUI;
+import swingUI.constantes.CoresUI;
+import swingUI.constantes.MainPainel;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -17,6 +15,7 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.text.MaskFormatter;
 import java.awt.*;
 import java.sql.Timestamp;
+import java.text.ParseException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
@@ -255,7 +254,7 @@ public class ReservaUI extends MainPainel {
             mask.setPlaceholderCharacter('_');
             campoDataHora = new JFormattedTextField(mask);
             campoDataHora.setFocusLostBehavior(JFormattedTextField.COMMIT_OR_REVERT);
-        } catch (java.text.ParseException e) {
+        } catch (ParseException e) {
             campoDataHora = new JFormattedTextField();
             System.err.println("Erro ao criar máscara de data/hora: " + e.getMessage());
         }
@@ -286,6 +285,24 @@ public class ReservaUI extends MainPainel {
             try {
                 int idCliente = Integer.parseInt(campoIdCliente.getText().trim());
                 int idMesa = Integer.parseInt(campoIdMesa.getText().trim());
+                int numPessoas = Integer.parseInt(campoNumPessoas.getText().trim());
+                int capacidadeMesa = -1;
+                for (int i = 0; i < modeloTabelaMesas.getRowCount(); i++) {
+                    int currentMesaId = (int) modeloTabelaMesas.getValueAt(i, 0);
+                    if (currentMesaId == idMesa) {
+                        capacidadeMesa = (int) modeloTabelaMesas.getValueAt(i, 1);
+                        break;
+                    }
+                }
+
+                if (capacidadeMesa == -1) {
+                    throw new IllegalArgumentException("Mesa com ID " + idMesa + " não encontrada na lista de mesas.");
+                }
+
+                if (numPessoas > capacidadeMesa) {
+                    JOptionPane.showMessageDialog(this, "O número de pessoas (" + numPessoas + ") excede a capacidade da mesa (" + capacidadeMesa + ").", "Erro de Validação", JOptionPane.WARNING_MESSAGE);
+                    return;
+                }
 
                 String dataHoraStr = campoDataHora.getText().trim();
 
@@ -295,8 +312,6 @@ public class ReservaUI extends MainPainel {
 
                 LocalDateTime localDateTime = LocalDateTime.parse(dataHoraStr, FORMATADOR_DATA_HORA);
                 Timestamp dataHoraReserva = Timestamp.valueOf(localDateTime);
-
-                int numPessoas = Integer.parseInt(campoNumPessoas.getText().trim());
 
                 if (reservaParaEditar == null) {
                     Reserva novaReserva = new Reserva(0, idCliente, idMesa, dataHoraReserva, numPessoas);
@@ -320,6 +335,7 @@ public class ReservaUI extends MainPainel {
             }
         }
     }
+
 
     private void editarReservaSelecionada() {
         int linhaSelecionada = tabelaReservas.getSelectedRow();
