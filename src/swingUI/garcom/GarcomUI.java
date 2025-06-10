@@ -10,7 +10,7 @@ import swingUI.comanda.ComandaUI;
 import swingUI.constants.CoresUI;
 import swingUI.constants.MainPainel;
 import swingUI.login.LoginUI;
-import swingUI.reserva.ReservaUI;
+import swingUI.ReservaUI;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -55,9 +55,9 @@ public class GarcomUI extends MainPainel {
         abasPanel.setForeground(CoresUI.text_color);
         add(abasPanel);
 
-        adicionarAbaClientes();
-        adicionarAbaCardapio();
-        adicionarAbaMesas();
+//        adicionarAbaClientes();
+//        adicionarAbaCardapio();
+//        adicionarAbaMesas();
 
         JButton btnGerenciarReservas = new JButton("Gerenciar Reservas");
         btnGerenciarReservas.setFont(new Font("SansSerif", Font.BOLD, 18));
@@ -67,7 +67,7 @@ public class GarcomUI extends MainPainel {
         btnGerenciarReservas.setBorder(BorderFactory.createLineBorder(CoresUI.accent_color, 2, true));
         btnGerenciarReservas.setBounds(30, getContentPane().getHeight() - 80, 250, 50);
         btnGerenciarReservas.addActionListener(e -> {
-            new ReservaUI(this.userRole).setVisible(true); // Passando a role
+            new ReservaUI(this.userRole).setVisible(true);
             dispose();
         });
         add(btnGerenciarReservas);
@@ -80,7 +80,7 @@ public class GarcomUI extends MainPainel {
         btnGerenciarComandas.setBorder(BorderFactory.createLineBorder(CoresUI.accent_color, 2, true));
         btnGerenciarComandas.setBounds(300, getContentPane().getHeight() - 80, 250, 50);
         btnGerenciarComandas.addActionListener(e -> {
-            new ComandaUI(this.userRole).setVisible(true); // Passando a role
+            new ComandaUI(this.userRole).setVisible(true);
             dispose();
         });
         add(btnGerenciarComandas);

@@ -1,12 +1,13 @@
 package swingUI.gerente;
 
+import swingUI.CardapioUI;
 import swingUI.comanda.ComandaUI;
 import swingUI.mesa.MesaUI;
 import swingUI.cliente.ClienteUI;
 import swingUI.constants.CoresUI;
 import swingUI.constants.MainPainel;
 import swingUI.login.LoginUI;
-import swingUI.reserva.ReservaUI;
+import swingUI.ReservaUI;
 
 import javax.swing.*;
 import java.awt.*;
@@ -28,16 +29,16 @@ public class GerenteUI extends MainPainel {
         int espacoEntreBotoes = 20;
         int yInicial = 180;
 
-        JButton btnGerenciarUsuarios = new JButton("Gerenciar Usuários");
-        btnGerenciarUsuarios.setFont(new Font("SansSerif", Font.BOLD, 20));
-        btnGerenciarUsuarios.setBackground(CoresUI.primary_color.brighter());
-        btnGerenciarUsuarios.setForeground(CoresUI.text_color);
-        btnGerenciarUsuarios.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-        btnGerenciarUsuarios.setBorder(BorderFactory.createLineBorder(CoresUI.accent_color, 2, true));
-        btnGerenciarUsuarios.addActionListener(e -> {
-            JOptionPane.showMessageDialog(this, "Gerenciar Usuários clicado!");
-        });
-        posicionarComponenteCentralizado(btnGerenciarUsuarios, yInicial, larguraBotao, alturaBotao);
+//        JButton btnGerenciarUsuarios = new JButton("Gerenciar Usuários");
+//        btnGerenciarUsuarios.setFont(new Font("SansSerif", Font.BOLD, 20));
+//        btnGerenciarUsuarios.setBackground(CoresUI.primary_color.brighter());
+//        btnGerenciarUsuarios.setForeground(CoresUI.text_color);
+//        btnGerenciarUsuarios.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+//        btnGerenciarUsuarios.setBorder(BorderFactory.createLineBorder(CoresUI.accent_color, 2, true));
+//        btnGerenciarUsuarios.addActionListener(e -> {
+//            JOptionPane.showMessageDialog(this, "Gerenciar Usuários clicado!");
+//        });
+//        posicionarComponenteCentralizado(btnGerenciarUsuarios, yInicial, larguraBotao, alturaBotao);
 
         JButton btnGerenciarClientes = new JButton("Gerenciar Clientes");
         btnGerenciarClientes.setFont(new Font("SansSerif", Font.BOLD, 20));
@@ -82,7 +83,8 @@ public class GerenteUI extends MainPainel {
         btnGerenciarCardapio.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         btnGerenciarCardapio.setBorder(BorderFactory.createLineBorder(CoresUI.accent_color, 2, true));
         btnGerenciarCardapio.addActionListener(e -> {
-
+            new CardapioUI().setVisible(true);
+            dispose();
         });
         posicionarComponenteCentralizado(btnGerenciarCardapio, yInicial + 4 * (alturaBotao + espacoEntreBotoes), larguraBotao, alturaBotao);
 
@@ -98,7 +100,7 @@ public class GerenteUI extends MainPainel {
         });
         posicionarComponenteCentralizado(btnGerenciarComandas, yInicial + 5 * (alturaBotao + espacoEntreBotoes), larguraBotao, alturaBotao);
 
-        JButton btnVoltarLogin = new JButton("Voltar para LoginDAO");
+        JButton btnVoltarLogin = new JButton("Voltar para Login");
         btnVoltarLogin.setFont(new Font("SansSerif", Font.BOLD, 18));
         btnVoltarLogin.setBackground(CoresUI.muted_text_color);
         btnVoltarLogin.setForeground(CoresUI.primary_color);

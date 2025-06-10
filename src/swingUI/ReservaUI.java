@@ -1,4 +1,4 @@
-package swingUI.reserva;
+package swingUI;
 
 import model.Reserva;
 import service.ReservaDAO;
@@ -16,7 +16,6 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.text.MaskFormatter;
 import java.awt.*;
-import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -41,7 +40,6 @@ public class ReservaUI extends MainPainel {
     private JFormattedTextField campoDataHora;
     private JTextField campoNumPessoas;
 
-    // Define o formatador de data/hora aqui, com o espaço
     private static final DateTimeFormatter FORMATADOR_DATA_HORA = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
     public ReservaUI(String userRole) {
@@ -246,7 +244,6 @@ public class ReservaUI extends MainPainel {
         if (timestamp == null) {
             return "";
         }
-        // Usa o formatador padrão que inclui o espaço
         return timestamp.toLocalDateTime().format(FORMATADOR_DATA_HORA);
     }
 
@@ -257,7 +254,6 @@ public class ReservaUI extends MainPainel {
             MaskFormatter mask = new MaskFormatter("####-##-## ##:##:##");
             mask.setPlaceholderCharacter('_');
             campoDataHora = new JFormattedTextField(mask);
-            // Configura o JFormattedTextField para não permitir edição parcial
             campoDataHora.setFocusLostBehavior(JFormattedTextField.COMMIT_OR_REVERT);
         } catch (java.text.ParseException e) {
             campoDataHora = new JFormattedTextField();
@@ -268,7 +264,6 @@ public class ReservaUI extends MainPainel {
         if (reservaParaEditar != null) {
             campoIdCliente.setText(String.valueOf(reservaParaEditar.getId_cliente()));
             campoIdMesa.setText(String.valueOf(reservaParaEditar.getId_mesa()));
-            // Usa o formatador padrão para exibir no campo
             campoDataHora.setText(formatarTimestamp(reservaParaEditar.getData_hora()));
             campoNumPessoas.setText(String.valueOf(reservaParaEditar.getNum_pessoas()));
         }
@@ -292,16 +287,12 @@ public class ReservaUI extends MainPainel {
                 int idCliente = Integer.parseInt(campoIdCliente.getText().trim());
                 int idMesa = Integer.parseInt(campoIdMesa.getText().trim());
 
-                // Obtém o texto formatado pelo JFormattedTextField
-                // O MaskFormatter já deve garantir a formatação ou o commit/revert
                 String dataHoraStr = campoDataHora.getText().trim();
 
-                // Verifica se a string está completa (sem underscores)
                 if (dataHoraStr.contains("_")) {
                     throw new IllegalArgumentException("Por favor, preencha a data e hora completamente.");
                 }
 
-                // Agora, use o FORMATADOR_DATA_HORA que inclui o espaço
                 LocalDateTime localDateTime = LocalDateTime.parse(dataHoraStr, FORMATADOR_DATA_HORA);
                 Timestamp dataHoraReserva = Timestamp.valueOf(localDateTime);
 
@@ -342,8 +333,7 @@ public class ReservaUI extends MainPainel {
             int idCliente = (int) modeloTabelaReservas.getValueAt(linhaSelecionada, 1);
             int idMesa = (int) modeloTabelaReservas.getValueAt(linhaSelecionada, 2);
             String dataHoraStr = (String) modeloTabelaReservas.getValueAt(linhaSelecionada, 3);
-
-            // Usar o mesmo formatador para parsing aqui
+            
             Timestamp dataHora = Timestamp.valueOf(LocalDateTime.parse(dataHoraStr, FORMATADOR_DATA_HORA));
             int numPessoas = (int) modeloTabelaReservas.getValueAt(linhaSelecionada, 4);
 

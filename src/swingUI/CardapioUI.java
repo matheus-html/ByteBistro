@@ -1,4 +1,4 @@
-package swingUI.cardapio;
+package swingUI;
 
 import model.Cardapio;
 import service.CardapioDAO;
