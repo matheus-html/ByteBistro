@@ -8,7 +8,7 @@ public class BancoConfig {
         try{
             String dbUrl = "jdbc:mysql://127.0.0.1:3306/bytebistro";
             String dbUser = "root";
-            String dbPassword = "aninha123";
+            String dbPassword = "DIGITE SUA SENHA AQUI";
 
             Class.forName("com.mysql.cj.jdbc.Driver");
             return DriverManager.getConnection(dbUrl, dbUser, dbPassword);
